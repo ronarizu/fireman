@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LocoMotionMovement : MonoBehaviour
+public class LocoMotionCharacterMovement : MonoBehaviour
 {
     Animator animator;
     Vector2 input;
