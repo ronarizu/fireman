@@ -9,6 +9,8 @@ public class RayCastWeapon : MonoBehaviour
     public Transform rayCastDestination;
     public ParticleSystem hitEffect;
 
+    public TrailRenderer traccerEffect;
+
     Ray ray;
     RaycastHit hitInformation;
 
@@ -19,11 +21,17 @@ public class RayCastWeapon : MonoBehaviour
         ray.origin = rayCastOrigin.position;
         ray.direction = rayCastDestination.position - rayCastOrigin.position;
 
+
+        var tracer = Instantiate(traccerEffect, ray.origin, Quaternion.identity);
+        tracer.AddPosition(ray.origin);
+
         if (Physics.Raycast(ray, out hitInformation))
         {
             hitEffect.transform.position = hitInformation.point;
             hitEffect.transform.forward = hitInformation.normal;
             hitEffect.Emit(1);
+
+            tracer.transform.position = hitInformation.point;
         }
     }
 
