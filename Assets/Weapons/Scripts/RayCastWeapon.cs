@@ -7,6 +7,7 @@ public class RayCastWeapon : MonoBehaviour
     public bool isFiring = false;
     public Transform rayCastOrigin;
     public Transform rayCastDestination;
+    public ParticleSystem hitEffect;
 
     Ray ray;
     RaycastHit hitInformation;
@@ -20,8 +21,9 @@ public class RayCastWeapon : MonoBehaviour
 
         if (Physics.Raycast(ray, out hitInformation))
         {
-            Debug.Log("Generate line");
-            Debug.DrawLine(ray.origin, hitInformation.point, Color.red, 1.0f);
+            hitEffect.transform.position = hitInformation.point;
+            hitEffect.transform.forward = hitInformation.normal;
+            hitEffect.Emit(1);
         }
     }
 
