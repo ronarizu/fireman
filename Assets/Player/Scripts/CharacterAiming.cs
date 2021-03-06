@@ -9,7 +9,8 @@ public class CharacterAiming : MonoBehaviour
     public float aimDuration = 0.3f;
     public Rig aimLayer;
     Camera mainCamera;
-    
+    RayCastWeapon rayCastWeapon;
+
 
     // Start is called before the first frame update
     void Start()
@@ -17,6 +18,7 @@ public class CharacterAiming : MonoBehaviour
         mainCamera = Camera.main;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        rayCastWeapon = GetComponentInChildren<RayCastWeapon>();
     }
 
     // Update is called once per frame
@@ -31,8 +33,20 @@ public class CharacterAiming : MonoBehaviour
         if (Input.GetMouseButton(1))
         {
             aimLayer.weight += Time.deltaTime / aimDuration;
-        }else{
+        }
+        else
+        {
             aimLayer.weight -= Time.deltaTime / aimDuration;
+        }
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            rayCastWeapon.StartFiring();
+        }
+        
+        if (Input.GetButtonUp("Fire1"))
+        {
+            rayCastWeapon.StopFiring();
         }
     }
 }
