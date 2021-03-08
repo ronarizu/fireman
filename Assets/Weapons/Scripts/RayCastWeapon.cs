@@ -9,16 +9,13 @@ public class RayCastWeapon : MonoBehaviour
     public Transform rayCastDestination;
     public ParticleSystem hitEffect;
 
-    public GameObject waterLaser;
-
-    private GameObject spawnedLaser;
+    public TrailRenderer tracerEffect;
 
     Ray ray;
     RaycastHit hitInformation;
 
     void Start()
     {
-        spawnedLaser = Instantiate(waterLaser, rayCastOrigin.transform) as GameObject;
         StopFiring();
     }
 
@@ -29,13 +26,18 @@ public class RayCastWeapon : MonoBehaviour
         ray.origin = rayCastOrigin.position;
         ray.direction = rayCastDestination.position - rayCastOrigin.position;
 
-        spawnedLaser.SetActive(true);
+        var tracer = Instantiate(tracerEffect, ray.origin, Quaternion.identity);
+        tracer.AddPosition(ray.origin);
 
         if (Physics.Raycast(ray, out hitInformation))
         {
             hitEffect.transform.position = hitInformation.point;
             hitEffect.transform.forward = hitInformation.normal;
             hitEffect.Play();
+
+            tracer.transform.position = hitInformation.point;
+
+            Debug.DrawLine(ray.origin, hitInformation.point, Color.blue, 1.0f);
         }
     }
 
@@ -43,14 +45,11 @@ public class RayCastWeapon : MonoBehaviour
     {
         float distance = Vector3.Distance(rayCastOrigin.position, rayCastDestination.position );
         Vector3 oneThird = rayCastOrigin.position + ray.direction * (distance * 0.3f);
-
-        spawnedLaser.transform.position = oneThird;
     }
 
     public void StopFiring()
     {
         isFiring = false;
-        spawnedLaser.SetActive(false);
         hitEffect.Stop();
     }
 }
