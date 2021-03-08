@@ -39,12 +39,17 @@ public class CharacterAiming : MonoBehaviour
             aimLayer.weight -= Time.deltaTime / aimDuration;
         }
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetMouseButtonDown(0))
         {
             rayCastWeapon.StartFiring();
         }
+
+        if (Input.GetMouseButton(0))
+        {
+            rayCastWeapon.updateLaser();
+        }
         
-        if (Input.GetButtonUp("Fire1"))
+        if (Input.GetMouseButtonUp(0))
         {
             rayCastWeapon.StopFiring();
         }
