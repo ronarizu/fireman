@@ -35,7 +35,7 @@ public class RayCastWeapon : MonoBehaviour
         {
             hitEffect.transform.position = hitInformation.point;
             hitEffect.transform.forward = hitInformation.normal;
-            hitEffect.Emit(1);
+            hitEffect.Play();
         }
     }
 
@@ -51,5 +51,6 @@ public class RayCastWeapon : MonoBehaviour
     {
         isFiring = false;
         spawnedLaser.SetActive(false);
+        hitEffect.Stop();
     }
 }
