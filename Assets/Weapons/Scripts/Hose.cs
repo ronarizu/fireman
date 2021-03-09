@@ -2,36 +2,34 @@ using System;
 using UnityEngine;
 
 
-namespace UnityStandardAssets.Effects
+public class Hose : MonoBehaviour
 {
-    public class Hose : MonoBehaviour
+    public float maxPower = 20;
+    public float minPower = 5;
+    public float changeSpeed = 5;
+    public ParticleSystem[] hoseWaterSystems;
+    public Renderer systemRenderer;
+
+    private float m_Power;
+
+
+    // Update is called once per frame
+    private void Update()
     {
-        public float maxPower = 20;
-        public float minPower = 5;
-        public float changeSpeed = 5;
-        public ParticleSystem[] hoseWaterSystems;
-        public Renderer systemRenderer;
+        m_Power = Mathf.Lerp(m_Power, Input.GetMouseButton(0) ? maxPower : minPower, Time.deltaTime * changeSpeed);
 
-        private float m_Power;
-
-
-        // Update is called once per frame
-        private void Update()
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            m_Power = Mathf.Lerp(m_Power, Input.GetMouseButton(0) ? maxPower : minPower, Time.deltaTime*changeSpeed);
+            systemRenderer.enabled = !systemRenderer.enabled;
+        }
 
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                systemRenderer.enabled = !systemRenderer.enabled;
-            }
-
-            foreach (var system in hoseWaterSystems)
-            {
-				ParticleSystem.MainModule mainModule = system.main;
-                mainModule.startSpeed = m_Power;
-                var emission = system.emission;
-                emission.enabled = (m_Power > minPower*1.1f);
-            }
+        foreach (var system in hoseWaterSystems)
+        {
+            ParticleSystem.MainModule mainModule = system.main;
+            mainModule.startSpeed = m_Power;
+            var emission = system.emission;
+            emission.enabled = (m_Power > minPower * 1.1f);
         }
     }
 }
+
