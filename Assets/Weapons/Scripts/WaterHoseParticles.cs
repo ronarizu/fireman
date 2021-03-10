@@ -10,6 +10,7 @@ public class WaterHoseParticles : MonoBehaviour
 
     private List<ParticleCollisionEvent> m_CollisionEvents = new List<ParticleCollisionEvent>();
     private ParticleSystem m_ParticleSystem;
+    private float waterModifier = 1f;
 
 
     private void Start()
@@ -20,39 +21,38 @@ public class WaterHoseParticles : MonoBehaviour
 
     private void OnParticleCollision(GameObject other)
     {
-
-
-        int numCollisionEvents = m_ParticleSystem.GetCollisionEvents(other, m_CollisionEvents);
-        int i = 0;
-
-        Debug.Log(numCollisionEvents);
-        
-        ParticleSystem fireParticles = other.GetComponent<ParticleSystem>();
-        ParticleSystem.EmissionModule emissionModule = fireParticles.emission;
-
-        while (i < numCollisionEvents)
+        if (other.tag == "Fire")
         {
-            if (Time.time > lastSoundTime + 0.2f)
-            {
-                lastSoundTime = Time.time;
-            }
+            int numCollisionEvents = m_ParticleSystem.GetCollisionEvents(other, m_CollisionEvents);
+            int i = 0;
 
-            var col = m_CollisionEvents[i].colliderComponent;
-            var attachedRigidbody = col.GetComponent<Rigidbody>();
-            if (attachedRigidbody != null)
-            {
-                Vector3 vel = m_CollisionEvents[i].velocity;
-                attachedRigidbody.AddForce(vel * force, ForceMode.Impulse);
-            }
+            //get the particle system of the fire enemy
+            ParticleSystem fireParticles = other.GetComponentInChildren<ParticleSystem>();
+            ParticleSystem.EmissionModule emissionModule = fireParticles.emission;
 
-            // other.BroadcastMessage("Extinguish", SendMessageOptions.DontRequireReceiver);
-            if (other.tag == "Fire")
+            while (i < numCollisionEvents)
             {
-                Debug.Log(other.tag);
-                emissionModule.rateOverTime = i;
-            }
+                if (Time.time > lastSoundTime + 0.2f)
+                {
+                    lastSoundTime = Time.time;
+                }
 
-            i++;
+                var col = m_CollisionEvents[i].colliderComponent;
+                var attachedRigidbody = col.GetComponent<Rigidbody>();
+                if (attachedRigidbody != null)
+                {
+                    Vector3 vel = m_CollisionEvents[i].velocity;
+                    attachedRigidbody.AddForce(vel * force, ForceMode.Impulse);
+                }
+
+                // other.BroadcastMessage("Extinguish", SendMessageOptions.DontRequireReceiver);
+                if (other.tag == "Fire")
+                {
+                    emissionModule.rateOverTime = (emissionModule.rateOverTime.constant - waterModifier);
+                }
+
+                i++;
+            }
         }
     }
 }
