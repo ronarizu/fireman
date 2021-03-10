@@ -49,6 +49,10 @@ public class WaterHoseParticles : MonoBehaviour
                 if (other.tag == "Fire")
                 {
                     emissionModule.rateOverTime = (emissionModule.rateOverTime.constant - waterModifier);
+
+                    if(emissionModule.rateOverTime.constant == 0){
+                        Destroy(other);
+                    }
                 }
 
                 i++;
