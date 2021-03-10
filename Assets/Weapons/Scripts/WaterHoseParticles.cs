@@ -20,10 +20,15 @@ public class WaterHoseParticles : MonoBehaviour
 
     private void OnParticleCollision(GameObject other)
     {
-        Debug.Log(other.name);
+
 
         int numCollisionEvents = m_ParticleSystem.GetCollisionEvents(other, m_CollisionEvents);
         int i = 0;
+
+        Debug.Log(numCollisionEvents);
+        
+        ParticleSystem fireParticles = other.GetComponent<ParticleSystem>();
+        ParticleSystem.EmissionModule emissionModule = fireParticles.emission;
 
         while (i < numCollisionEvents)
         {
@@ -44,7 +49,7 @@ public class WaterHoseParticles : MonoBehaviour
             if (other.tag == "Fire")
             {
                 Debug.Log(other.tag);
-                other.SetActive(false);
+                emissionModule.rateOverTime = i;
             }
 
             i++;
